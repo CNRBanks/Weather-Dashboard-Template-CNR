@@ -1,4 +1,5 @@
-http://api.openweathermap.org/data/2.5/forecast?id=524901&appid={a78e40801a21ef17fd51e103613b9fea}
+https://api.openweathermap.org/data/3.0/onecall?lat=33.44&lon=-94.04&appid={2e7b9b6d0b7e8eeb029b70174b7f4db5}
 
 
-MY API KEY = a78e40801a21ef17fd51e103613b9fea
+MY API KEY = 2e7b9b6d0b7e8eeb029b70174b7f4db5
+
