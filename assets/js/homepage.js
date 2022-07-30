@@ -30,9 +30,10 @@ var buttonClickHandler = function (event) {
 };
 
 var getUserRepos = function (user) {
-  var apiUrl = 'https://api.github.com/users/' + user + '/repos';
+  var apiUrl = 'http://api.openweathermap.org/data/2.5/forecast?id=524901&appid={a78e40801a21ef17fd51e103613b9fea}';
 
   fetch(apiUrl)
+    console.log(fetch(apiUrl))
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
@@ -48,7 +49,7 @@ var getUserRepos = function (user) {
 };
 
 var getFeaturedRepos = function (language) {
-  var apiUrl = 'https://api.github.com/search/repositories?q=' + language + '+is:featured&sort=help-wanted-issues';
+  var apiUrl = 'http://api.openweathermap.org/data/2.5/forecast?id=524901&appid={a78e40801a21ef17fd51e103613b9fea}';
 
   fetch(apiUrl).then(function (response) {
     if (response.ok) {
