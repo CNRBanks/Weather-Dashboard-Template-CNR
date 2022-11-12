@@ -1,5 +1,6 @@
 https://api.openweathermap.org/data/3.0/onecall?lat=33.44&lon=-94.04&appid={2e7b9b6d0b7e8eeb029b70174b7f4db5}
 
-
+# Using API Key from earlier project, I believe its still active
 MY API KEY = 2e7b9b6d0b7e8eeb029b70174b7f4db5
+
 
