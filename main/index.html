@@ -29,12 +29,12 @@
       </div>
       <div class="row">
         <div class="input-field col s6">
-          <input value="Brunswick" id="cityName" type="text" class="validate"/>
+          <input value="Brunswick" id="cityNombre" type="text" class="validate"/>
           <label class="active" for="first_name2">City Name</label>
         </div>
         <a id="searchBtn" class="waves-effect waves-light btn">search</a>
     </div>
-    <div id="searchedCities"></div>
+    <div id="searchedCiudad"></div>
     <div class="row">
       <div id="currentDiv"></div>
     </div>
@@ -43,54 +43,94 @@
     </div>
   </div>
 
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+  <script>
+    let myStoredCiudad =
+      JSON.parse(localStorage.getItem("storedCiudad")) || [];
+
+      myStoredCiudad.forEach((ciudad) => {
+        document.getElementById("searchedCiudad").innerHTML += ` <p data-city="${ciudad}" class="storedCiudad"> ${ciudad} </p>`;
+      });
+
+      document.addEventListener("click", (event) => {
+        if (event.target.classList.contains("storedCiudad")) {
+          let cityNombre = event.target.dataset.ciudad;
+          console.log(cityNombre);
+          axios
+            .get(`https://api.openweathermap.org/data/2.5/forecast?q=${cityNombre}&units=imperial&appid=2e7b9b6d0b7e8eeb029b70174b7f4db5`).then((res) => {
+              console.log(res.data);
+
+              let lat = res.data.ciudad.coord.lat;
+              let lon = res.data.ciudad.coord.lon;
+              axios
+                .get(
+                  `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&&appid=2e7b9b6d0b7e8eeb029b70174b7f4db5`
+                )
+                .then((resp) => {
+                  console.log(resp.data);
+                  let uvi;
+                  if (resp.data.current.uvi < 2) {
+                    uvi = "grey";
+                  } else if (resp.data.current.uvi < 5) {
+                    uvi = "pink";
+                  } else {
+                    uvi = "yellow";
+                  }
+                  document.getElementById("currentDiv").innerHTML = `
+                  `;
+                  }
+                })
+        }
+      })
+  </script>
 </body>
 
 
-  <!-- <body class="flex-column min-100-vh">
-    <header class="hero">
-      <h1 class="app-title"><i class="fab"></i> Weather Dashboard Template</h1>
-      <p>
-        Search for a location or click on a link to see the weather in that
-        area!
-      </p>
-    </header>
+  // <!-- <body class="flex-column min-100-vh">
+  //   <header class="hero">
+  //     <h1 class="app-title"><i class="fab"></i> Weather Dashboard Template</h1>
+  //     <p>
+  //       Search for a location or click on a link to see the weather in that
+  //       area!
+  //     </p>
+  //   </header>
 
-    <main class="flex-row justify-space-between">
-      <div class="col-12 col-md-4">
-        <div class="card">
-          <h3 class="card-header text-uppercase">Search By Location</h3>
-          <form id="user-form" class="card-body">
-            <label class="form-label" for="username">Location</label>
-            <input
-              name="username"
-              id="username"
-              type="text"
-              autofocus="true"
-              class="form-input"
-            />
-            <button type="submit" class="btn">Get Location</button>
-          </form>
-        </div>
+  //   <main class="flex-row justify-space-between">
+  //     <div class="col-12 col-md-4">
+  //       <div class="card">
+  //         <h3 class="card-header text-uppercase">Search By Location</h3>
+  //         <form id="user-form" class="card-body">
+  //           <label class="form-label" for="username">Location</label>
+  //           <input
+  //             name="username"
+  //             id="username"
+  //             type="text"
+  //             autofocus="true"
+  //             class="form-input"
+  //           />
+  //           <button type="submit" class="btn">Get Location</button>
+  //         </form>
+  //       </div>
 
-        <div class="card">
-          <h3 class="card-header text-uppercase">Select Location</h3>
-          <div id="language-buttons" class="card-body">
-            <button data-language="javascript" class="btn">Texas</button>
-            <button data-language="html" class="btn">Maine</button>
-            <button data-language="css" class="btn">New Brunswick</button>
-          </div>
-        </div>
-      </div>
+  //       <div class="card">
+  //         <h3 class="card-header text-uppercase">Select Location</h3>
+  //         <div id="language-buttons" class="card-body">
+  //           <button data-language="javascript" class="btn">Texas</button>
+  //           <button data-language="html" class="btn">Maine</button>
+  //           <button data-language="css" class="btn">New Brunswick</button>
+  //         </div>
+  //       </div>
+  //     </div>
 
-      <div class="col-12 col-md-8">
-        <h2 class="subtitle">
-          Showing Weather for: <span id="repo-search-term"></span>
-        </h2>
-        <div id="repos-container" class="list-group"></div>
-      </div>
-    </main> -->
+  //     <div class="col-12 col-md-8">
+  //       <h2 class="subtitle">
+  //         Showing Weather for: <span id="repo-search-term"></span>
+  //       </h2>
+  //       <div id="repos-container" class="list-group"></div>
+  //     </div>
+  //   </main> -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  </body>
-</html>
+//     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+//   </body>
+// </html>
