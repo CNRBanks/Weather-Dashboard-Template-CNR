@@ -3,25 +3,16 @@
 ## Table of Contents
 
 - [Description](#description)
-- [Installations](#installations)
-- [Usage](#usage)
+- [Preview](#preview)
 - [License](#license)
 
 ## Description
 
-This is a progressive web application that can be utilized online by visitng the url or installed for usage offline!
+This is a simple weather application that allows users to search american cities by name and view the current and upcoming 5 day forecast!
 
-## Installations
+## Preview
 
-You can install this application by opening the application in your terminal and running "npm i" and then "npm run start" then "npm run start:dev" to start the applications server, then open it by navigating to localhost:3000 in your browser.
-
-If you would like to install the application on to your computer you can do so by clicking the button seen on the top left corner of the webpage.
-
-https://fast-river-93745.herokuapp.com/
-
-## Usage
-
-This app can be used as a basic text editor!
+![preview](/assets/preview/ss.png)
 
 ## License
 

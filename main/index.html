@@ -4,11 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./styles/style.css" />
     <title>Weather Dashboard Template</title>
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
     <style>
       .grey {
         background-color: grey;
@@ -21,48 +21,59 @@
       }
     </style>
   </head>
-
   <body>
     <div class="container">
       <div class="row">
-        <h1>The Weather App Dashboard</h1>
+        <h1>A Simple Weather App</h1>
       </div>
       <div class="row">
         <div class="input-field col s6">
           <input value="Brunswick" id="cityNombre" type="text" class="validate"/>
           <label class="active" for="first_name2">City Name</label>
         </div>
-        <a id="searchBtn" class="waves-effect waves-light btn">search</a>
+        <a id="searchBtn" class="waves-effect waves-light green btn">Search</a>
     </div>
     <div id="searchedCiudad"></div>
     <div class="row">
-      <div id="currentDiv"></div>
+      <div id="firstDiv"></div>
     </div>
     <div class="row">
-      <div id="fiveDay"></div>
+      <div id="cincoDia"></div>
     </div>
   </div>
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      <a class="grey-text text-darken-4 right" href="#!">Visit my github here!</a>
+      </div>
+    </div>
+  </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.0/axios.min.js"></script>
 
   <script>
+    let apiKey = ['2e7b9b6d0b7e8eeb029b70174b7f4db5'];
     let myStoredCiudad =
       JSON.parse(localStorage.getItem("storedCiudad")) || [];
-
-      myStoredCiudad.forEach((ciudad) => {
-        document.getElementById("searchedCiudad").innerHTML += ` <p data-city="${ciudad}" class="storedCiudad"> ${ciudad} </p>`;
+      myStoredCiudad.forEach((city) => {
+        document.getElementById("searchedCiudad").innerHTML += ` <p data-city="${city}" class="storedCiudad"> ${city} </p>`;
       });
-
       document.addEventListener("click", (event) => {
         if (event.target.classList.contains("storedCiudad")) {
-          let cityNombre = event.target.dataset.ciudad;
+          let cityNombre = event.target.dataset.city;
           console.log(cityNombre);
           axios
             .get(`https://api.openweathermap.org/data/2.5/forecast?q=${cityNombre}&units=imperial&appid=2e7b9b6d0b7e8eeb029b70174b7f4db5`).then((res) => {
               console.log(res.data);
-
-              let lat = res.data.ciudad.coord.lat;
-              let lon = res.data.ciudad.coord.lon;
+              let lat = res.data.city.coord.lat;
+              let lon = res.data.city.coord.lon;
               axios
                 .get(
                   `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&&appid=2e7b9b6d0b7e8eeb029b70174b7f4db5`
@@ -70,67 +81,203 @@
                 .then((resp) => {
                   console.log(resp.data);
                   let uvi;
-                  if (resp.data.current.uvi < 2) {
+                  if (resp.data.current.uvi < 3) {
                     uvi = "grey";
-                  } else if (resp.data.current.uvi < 5) {
+                  } else if (resp.data.current.uvi < 6) {
                     uvi = "pink";
                   } else {
                     uvi = "yellow";
                   }
-                  document.getElementById("currentDiv").innerHTML = `
-                  `;
-                  }
-                })
+                  document.getElementById("firstDiv").innerHTML = `<div class="row">
+          <div class="col s12 m7 z-depth-5">
+          <div class="card light-blue">
+          <div class="card-image">
+          <img src="http://openweathermap.org/img/wn/${res.data.list[0].weather[0].icon}@4x.png">
+          <span class="card-title bold-black-text">${res.data.city.name}</span>
+          </div>
+          <div class="card-content">
+          <p>${res.data.list[0].dt_txt}</p>
+          <p> current humidity: ${res.data.list[0].main.humidity}% </p>
+          <p> current temperature: ${res.data.list[0].main.temp}°F </p>
+          <p> current wind speed: ${res.data.list[0].wind.speed} mph </p>
+           <p class="${uvi}"> current uvi: ${resp.data.current.uvi}</p>
+          </div>
+          <div class="card-action">
+         
+        </div>
+         </div>
+          </div>
+         </div>
+        </div>
+        `
+
+        let forecastArray = []
+        let dia1 = {
+          date: res.data.list[8].dt_txt,
+          icon: res.data.list[8].weather[0].icon,
+          windspeed: res.data.list[8].wind.speed,
+          humidity: res.data.list[0].main.humidity,
+          temp: res.data.list[8].main.temp
         }
+        let dia2 = {
+          date: res.data.list[16].dt_txt,
+          icon: res.data.list[16].weather[0].icon,
+          windspeed: res.data.list[16].wind.speed,
+          humidity: res.data.list[16].main.humidity,
+          temp: res.data.list[16].main.temp
+        }
+        let dia3 = {
+          date: res.data.list[24].dt_txt,
+          icon: res.data.list[24].weather[0].icon,
+          windspeed: res.data.list[24].wind.speed,
+          humidity: res.data.list[24].main.humidity,
+          temp: res.data.list[24].main.temp
+        }
+        let dia4 = {
+          date: res.data.list[32].dt_txt,
+          icon: res.data.list[32].weather[0].icon,
+          windspeed: res.data.list[32].wind.speed,
+          humidity: res.data.list[32].main.humidity,
+          temp: res.data.list[32].main.temp
+        }
+        let dia5 = {
+          date: res.data.list[39].dt_txt,
+          icon: res.data.list[39].weather[0].icon,
+          windspeed: res.data.list[39].wind.speed,
+          humidity: res.data.list[39].main.humidity,
+          temp: res.data.list[39].main.temp
+        }
+        forecastArray.push(dia1, dia2, dia3, dia4, dia5)
+        console.log(forecastArray)
+
+        forecastArray.forEach(dia => {
+          document.getElementById('cincoDia').innerHTML += `<div class="row">
+    <div class="col s12 m7 z-depth-5">
+      <div class="card light-blue">
+        <div class="card horizontal">
+          <img src="http://openweathermap.org/img/wn/${dia.icon}@4x.png">
+          <span class="card-title green-text center">${dia.date}</span>
+        </div>
+        <div class="card-content">
+          <p>humidity:${dia.humidity}%</p>
+          <p>${dia.temp}°F</p>
+        </div>
+        <div class="card-action">
+         
+        </div>
+      </div>
+    </div>
+  </div>`
+        })
       })
+    })
+  }
+})
+    document.getElementById('searchBtn').addEventListener("click", event=> {
+      let cityNombre = document.getElementById("cityNombre").value;
+      let storedCiudad = JSON.parse(localStorage.getItem('storedCiudad')) || []
+      storedCiudad.push(cityNombre)
+      localStorage.setItem('storedCiudad', JSON.stringify(storedCiudad))
+      console.log(cityNombre)
+      axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${cityNombre}&units=imperial&appid=${apiKey}`).then((res) => {
+        console.log(res.data);
+        let lat = res.data.city.coord.lat;
+        let lon = res.data.city.coord.lon;
+        axios.get(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&&appid=${apiKey}`).then((resp) => {
+          console.log(resp.data);
+                  let uvi;
+                  if (resp.data.current.uvi < 3) {
+                    uvi = "orange";
+                  } else if (resp.data.current.uvi < 6) {
+                    uvi = "pink";
+                  } else {
+                    uvi = "yellow";
+                  }
+                  document.getElementById("firstDiv").innerHTML = `<div class="row">
+          <div class="col s12 z-depth-5">
+            <div class="card light-blue">
+          <div class="card horizontal">
+              <img src="http://openweathermap.org/img/wn/${res.data.list[0].weather[0].icon}@4x.png">
+              <span class="card-title grey-text">${res.data.city.name}</span>
+            </div>
+          <div class="card-content">
+            <p>${res.data.list[0].dt_txt}</p>
+            <p> humidity: ${res.data.list[0].main.humidity}% </p>
+            <p> temp: ${res.data.list[0].main.temp}°F </p>
+            <p> wind speed: ${res.data.list[0].wind.speed} mph </p>
+            <p class="${uvi}"> uvi: ${resp.data.current.uvi}</p>
+              </div>
+              <div class="card-action">
+         
+        </div>
+            </div>
+         </div>
+        </div>`;
+
+        let forecastArray = []
+        let dia1 = {
+          icon: res.data.list[8].weather[0].icon,
+          humidity: res.data.list[0].main.humidity,
+          windspeed: res.data.list[8].wind.speed,
+          temp: res.data.list[8].main.temp,
+          date: res.data.list[8].dt_txt
+
+        }
+        let dia2 = {
+          icon: res.data.list[16].weather[0].icon,
+          humidity: res.data.list[16].main.humidity,
+          windspeed: res.data.list[16].wind.speed,
+          temp: res.data.list[16].main.temp,
+          date: res.data.list[16].dt_txt
+        }
+        let dia3 = {
+          icon: res.data.list[24].weather[0].icon,
+          humidity: res.data.list[24].main.humidity,
+          windspeed: res.data.list[24].wind.speed,
+          temp: res.data.list[24].main.temp,
+          date: res.data.list[24].dt_txt
+        }
+        let dia4 = {
+          icon: res.data.list[32].weather[0].icon,
+          humidity: res.data.list[32].main.humidity,
+          windspeed: res.data.list[32].wind.speed,
+          temp: res.data.list[32].main.temp,
+          date: res.data.list[32].dt_txt
+        }
+        let dia5 = {
+          icon: res.data.list[39].weather[0].icon,
+          humidity: res.data.list[39].main.humidity,
+          windspeed: res.data.list[39].wind.speed,
+          temp: res.data.list[39].main.temp,
+          date: res.data.list[39].dt_txt,
+        }
+        forecastArray.push(dia1, dia2, dia3, dia4, dia5)
+        console.log(forecastArray)
+        forecastArray.forEach((dia) => {
+          document.getElementById("cincoDia").innerHTML += `<div class="row">
+    <div class="col s12 m7 z-depth-5">
+      <div class="card light-blue">
+        <div class="card horizontal">
+          <img src="http://openweathermap.org/img/wn/${dia.icon}@4x.png">
+          <span class="card-title black-text">${dia.date}</span>
+        </div>
+        <div class="card-content">
+          <p>Temperature: ${dia.temp}°F</p>
+          <p>Humidity: ${dia.humidity}%</p>
+          <p>Windspeed: ${dia.windspeed}</p>
+        </div>
+        <div class="card-action">
+         
+        </div>
+      </div>
+    </div>
+  </div>`
+        })
+        })
+      })
+    })
+  
+
   </script>
 </body>
-
-
-  // <!-- <body class="flex-column min-100-vh">
-  //   <header class="hero">
-  //     <h1 class="app-title"><i class="fab"></i> Weather Dashboard Template</h1>
-  //     <p>
-  //       Search for a location or click on a link to see the weather in that
-  //       area!
-  //     </p>
-  //   </header>
-
-  //   <main class="flex-row justify-space-between">
-  //     <div class="col-12 col-md-4">
-  //       <div class="card">
-  //         <h3 class="card-header text-uppercase">Search By Location</h3>
-  //         <form id="user-form" class="card-body">
-  //           <label class="form-label" for="username">Location</label>
-  //           <input
-  //             name="username"
-  //             id="username"
-  //             type="text"
-  //             autofocus="true"
-  //             class="form-input"
-  //           />
-  //           <button type="submit" class="btn">Get Location</button>
-  //         </form>
-  //       </div>
-
-  //       <div class="card">
-  //         <h3 class="card-header text-uppercase">Select Location</h3>
-  //         <div id="language-buttons" class="card-body">
-  //           <button data-language="javascript" class="btn">Texas</button>
-  //           <button data-language="html" class="btn">Maine</button>
-  //           <button data-language="css" class="btn">New Brunswick</button>
-  //         </div>
-  //       </div>
-  //     </div>
-
-  //     <div class="col-12 col-md-8">
-  //       <h2 class="subtitle">
-  //         Showing Weather for: <span id="repo-search-term"></span>
-  //       </h2>
-  //       <div id="repos-container" class="list-group"></div>
-  //     </div>
-  //   </main> -->
-
-//     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-//   </body>
-// </html>
+ </html>
